@@ -6,7 +6,7 @@
     </head>
     <body>
             Voer een tekst in
-        <form method="post" action="./controllers/Presenter.php">
+        <form method="post" action="../controllers/Presenter.php">
             <input type="text" name="naam">
             <input type="submit" name="submit" value="Submit">
         </form>
