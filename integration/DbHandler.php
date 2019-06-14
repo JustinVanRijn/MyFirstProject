@@ -7,63 +7,63 @@
  */
 
 /**
- * Description of Dbhandler
+ * Description of DbHandler
  *
- * @author sproe
+ * @author chan2
  */
+//
+//$db = new DbHandler();
+////$db->findWord("lepel");
+//if ($db->findWord("lepel") == TRUE){
+//    $db->printWord();
+//}else {
+//    echo "Geen kaas vandaag";
+//}
 
-$db = new DbHandler();
-if ($db->findWoord("lepel") == TRUE){
-   $db->printWoord();
-}
-else{
-   echo "Sorry geen kaas vandaag"; 
-}
-
-
+include_once '_config.php';        
 class DbHandler {
-    //dit noemen in OO een attribute
-    private $woord;
+    // dit noemen we in OO een attribute
+    private $word;
     
     //een functie in OO heet een method
-    function findWoord($woord){
+    function findWord($word){
         $result = FALSE;
-        $this->woord = $woord;
-                
-    $options = [
-        PDO::ATTR_ERRMODE               => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE    => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES      => false,
-    ];
-
-    $host = '127.0.0.1';
-    $charset = 'utf8mb4';
-    $db = 'palindroom';
-    $user = 'root';
-    $password = "";
-    
-    $host = "mysql:host=$host;dbname=$db;charset=$charset";
-    
-    try{
-        //stap 2: Connect
-        $conn = new PDO($host, $user, $password, $options);
-        //stap 3: run the query
-        $stmt = $conn->query($sql);
-        //Stap 4
-        if ($stmt->rowCount() == 1){
-            $result = TRUE;
+        $this->word = $word;
+        // stap 1 : instellen PDO
+        $options = [
+            PDO::ATTR_ERRMODE               =>  PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE    =>  PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES      =>  false,
+        ];
+        
+        $host = '127.0.0.1';
+        $charset = 'utf8mb4';
+        $db = 'palindroom';
+        
+        $host = "mysql:host=$host;dbname=$db;charset=$charset";
+        
+        $sql = "SELECT * FROM palindromen WHERE woord='".$word."';";
+        //Stap 2: Connect
+        try {
+            $conn = new PDO($host, USER, PASSWORD, $options);
+            // Stap 3: rim tje query
+            $stmt = $conn->query($sql);
+            // Stap 4: fetch
+            if($stmt->rowCount() ==1){
+                $result = TRUE;
+            }
+           // $rs = $stmt->fetchAll();
+            
+            
+        } catch (PDOException $e) {
+                echo "fout" . $e->getMessage()."(".$e->getCode().").";
         }
-        return $result;
+               return $result;
     }
-    catch(PDOEsception $e) {
-        echo "jouw tekst" . $e->getMessage() . "(".$e->getCode().").";
-        
+    function printWord(){
+        echo $this->word;
     }
-    }
-        
-    }
-    
-    function printWoord(){
-        echo $this->woord;
-    }
+  }
+    //put your code here
+     
 
